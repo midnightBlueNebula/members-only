@@ -2,7 +2,7 @@ class UsersController < ApplicationController
 
   before_action :set_user   , only: [:show, :edit, 
                                             :update, :destroy]
-  before_action :user_params, only: [:create, :edit, :update]
+  before_action :user_params, only: [:create, :update]
   before_action :admin_auth , only: [:delete]
 
   def new
@@ -12,9 +12,11 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-
+      flash[:success] = "Account created successfully."
+      redirect_to @user
     else
-
+      flash[:error] = "Failed to create account."
+      render :new
     end
   end
 
@@ -30,9 +32,11 @@ class UsersController < ApplicationController
 
   def update
     if @user.update_attributes(user_params)
-
+      flash[:success] = "Account edited successfully."
+      redirect_to @user 
     else
-
+      flash[:error] = "Failed to edit account."
+      redirect_to root_path
     end
   end
 
