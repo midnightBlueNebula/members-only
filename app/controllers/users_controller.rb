@@ -1,9 +1,12 @@
 class UsersController < ApplicationController
 
-  before_action :set_user   , only: [:show, :edit, 
+  before_action :set_user    , only: [:show, :edit, 
                                             :update, :destroy]
-  before_action :user_params, only: [:create, :update]
-  before_action :admin_auth , only: [:delete]
+  before_action :user_params , only: [:create, :update]
+  before_action :check_login , only: [:show, :edit, :update, 
+                                             :destroy, :index]
+  before_action :admin_auth  , only: [:delete]
+  before_action :correct_user, only: [:edit, :update]
 
   def new
     @user = User.new
@@ -13,6 +16,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       flash[:success] = "Account created successfully."
+      log_in @user
       redirect_to @user
     else
       flash[:error] = "Failed to create account."
@@ -42,9 +46,11 @@ class UsersController < ApplicationController
 
   def destroy
     if @user.destroy
-
+      flash[:success] = "Selected account successfully deleted."
+      redirect_to users_path
     else
-      
+      flash[:error] = "Failed to delete."
+      redirect_to users_path
     end
   end
 
@@ -59,6 +65,15 @@ class UsersController < ApplicationController
   end
 
   def admin_auth
+    redirect_to(root_url) unless current_user.admin?
+  end
+
+  def correct_user
+    redirect_to(root_url) unless User.find(current_user.id) == User.find(params[:id])
+  end
+
+  def check_login
+    redirect_to(root_url) unless logged_in?
   end
 
 end
