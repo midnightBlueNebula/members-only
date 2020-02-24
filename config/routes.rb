@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  get 'comments/new'
+  get 'posts/new'
   root   'home_page#home'
   
   get    '/signup'        , to: 'users#new'

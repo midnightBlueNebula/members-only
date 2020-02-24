@@ -2,20 +2,26 @@ class User < ApplicationRecord
 
     attr_accessor :remember_token
 
+    has_many :posts   , dependent: :destroy
+    has_many :comments, dependent: :destroy
+
     before_create { email.downcase! }
     has_secure_password
 
-    validates :name, presence: true, length: { minimum: 2, maximum: 50 }, uniqueness: { case_sensitive: true }
+    validates :name, presence: true, length: { minimum: 2, maximum: 50 }, 
+                                    uniqueness: { case_sensitive: true }
 
     VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
-    validates :email, presence: true, uniqueness: { case_sensitive: false }, format: { with: VALID_EMAIL_REGEX }
+    validates :email, presence: true, uniqueness: { case_sensitive: false }, 
+                                        format: { with: VALID_EMAIL_REGEX }
 
     validates :password, presence: true, length: { minimum: 6, maximum: 100 }
 
     class << self
 
         def digest(string)
-            cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST : BCrypt::Engine.cost                                                          
+            cost = ActiveModel::SecurePassword.min_cost ? 
+                        BCrypt::Engine::MIN_COST : BCrypt::Engine.cost                                                          
             BCrypt::Password.create(string, cost: cost)
         end
 
