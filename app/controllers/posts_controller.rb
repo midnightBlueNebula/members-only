@@ -20,8 +20,7 @@ class PostsController < ApplicationController
   end
 
   def show
-    @user = User.find(@post.user_id)
-    @comments = Post.comments.all 
+    @comments = @post.comments.all 
   end
 
   def edit
