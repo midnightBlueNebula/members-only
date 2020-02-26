@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
 
-  get 'comments/new'
-  get 'posts/new'
   root   'home_page#home'
   
   get    '/signup'        , to: 'users#new'
@@ -17,5 +15,7 @@ Rails.application.routes.draw do
   delete '/logout'        , to: 'sessions#destroy'
 
   resources :users
+  resources :comments
+  resources :posts
 
 end

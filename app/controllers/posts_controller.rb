@@ -20,6 +20,8 @@ class PostsController < ApplicationController
   end
 
   def show
+    @user = User.find(@post.user_id)
+    @comments = Post.comments.all 
   end
 
   def edit
@@ -60,7 +62,7 @@ class PostsController < ApplicationController
   end
 
   def post_params
-    params.require(:post).permit(:content)
+    params.require(:post).permit(:title, :content)
   end
 
 end

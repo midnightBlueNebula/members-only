@@ -1,0 +1,41 @@
+<section id="post">
+    <h1 id="post-title">@post.title</h1>
+    <span class="user-name">@post.user.name</span>
+    <h4 id="post-content">@post.content</h4>
+
+    <i class="post-create-date">Created at: </i><%= @post.created_at%>
+
+    <% if @post.updated_at > @post.created_at %>
+        <i class="post-update-date">Updated at: </i><%= @post.updated_at %>
+    <% end %>
+
+    <% if @post.user == current_user || current_user.admin? %>
+        <%= link_to 'Delete', @post, method: :delete, data: { confirm: "Are you sure?" } %>
+        <% if @post.user == current_user %>
+            <%= link_to 'Edit', edit_post_path(@post) %>
+        <% end %>
+    <% end %>
+</section>
+
+<section id="comments">
+    <ul>
+        <% @comments.each do |comment| %>
+            <li>
+                <span class="user-name">comment.user.name</span>
+                <span class="comment-content">comment.content</span>
+                <i class="comment-create-date">Created at: </i><%= comment.created_at%>
+
+                <% if comment.updated_at > comment.created_at %>
+                    <i class="comment-update-date">Updated at: </i><%= comment.updated_at %>
+                <% end %>
+
+                <% if comment.user == current_user || current_user.admin? %>
+                    <%= link_to 'Delete', comment, method: :delete, data: { confirm: "Are you sure?" } %>
+                    <% if comment.user == current_user %>
+                        <%= link_to 'Edit', edit_comment_path(comment) %>
+                    <% end %>
+                <% end %>
+            </li>
+        <% end %>
+    </ul>
+</section>
