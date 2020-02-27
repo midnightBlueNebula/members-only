@@ -1,5 +1,5 @@
 <h1>Edit Post</h1>
 
-<%= form_for(@post, url: "posts/edit/#{@post.id}") do |f| %>
+<%= form_for(@post) do |f| %>
     <%= render "form" , f: f %>
 <% end %>

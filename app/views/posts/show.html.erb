@@ -1,7 +1,7 @@
 <section id="post">
-    <h1 id="post-title">@post.title</h1>
-    <span class="user-name">@post.user.name</span>
-    <h4 id="post-content">@post.content</h4>
+    <h1 id="post-title"><%= @post.title %></h1>
+    <span class="user-name"><i>Posted by <%= @post.user.name %>. </i></span>
+    <h4 id="post-content"><%= @post.content %></h4>
 
     <i class="post-create-date">Created at: </i><%= @post.created_at%>
 
@@ -17,12 +17,18 @@
     <% end %>
 </section>
 
+<% if logged_in? %>
+    <section id="new-comment">
+        <%= render "shared/comment-form", id_post: params[:id] %>
+    </section>
+<% end %>
+
 <section id="comments">
-    <ul>
+    <ol>
         <% @comments.each do |comment| %>
             <li>
-                <span class="user-name">comment.user.name</span>
-                <span class="comment-content">comment.content</span>
+                <span class="user-name"><i><%= comment.user.name %> says: </i></span>
+                <span class="comment-content"><%= comment.content %></span>
                 <i class="comment-create-date">Created at: </i><%= comment.created_at%>
 
                 <% if comment.updated_at > comment.created_at %>
@@ -37,5 +43,5 @@
                 <% end %>
             </li>
         <% end %>
-    </ul>
+    </ol>
 </section>

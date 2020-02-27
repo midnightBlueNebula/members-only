@@ -2,13 +2,14 @@ class PostsController < ApplicationController
 
   before_action :edit_auth_check, only: [:edit, :update]
   before_action :del_auth_check , only: [:destroy]
-  before_action :set_post       , only: [:show, :edit, :update, :destroy]
+  before_action :set_post       , only: [:show]
 
   def new
-    @post = Post.new
+    @post = current_user.posts.build
   end
 
   def create
+    redirect_to(root_url) unless logged_in?
     @post = current_user.posts.build(post_params)
     if @post.save
       flash[:success] = "Post sended."
@@ -21,6 +22,7 @@ class PostsController < ApplicationController
 
   def show
     @comments = @post.comments.all 
+    @comment  = current_user.comments.build if logged_in?
   end
 
   def edit
@@ -49,15 +51,18 @@ class PostsController < ApplicationController
   private
 
   def edit_auth_check
-    redirect_to(root_url) unless current_user == User.find(@post.user_id)
+    set_post
+    redirect_to(root_url) unless logged_in? && current_user == User.find(@post.user_id)
   end
 
   def del_auth_check
-    redirect_to(root_url) unless current_user.admin? || current_user == User.find(@post.user_id)
+    set_post
+    redirect_to(root_url) unless logged_in? && (current_user.admin? || 
+                                                current_user == User.find(@post.user_id))
   end
 
   def set_post
-    @post = Post.find[params[:id]]
+    @post = Post.find(params[:id])
   end
 
   def post_params

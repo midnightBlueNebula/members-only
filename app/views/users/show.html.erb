@@ -4,7 +4,8 @@
 <%= @user.created_at %> | <%= @user.updated_at %>
 
 <% if User.find(current_user.id) == User.find(params[:id]) %>
-    <%= link_to 'Edit', edit_user_path(@user) %> - <%= link_to 'Return home page', root_path %>
+    <%= link_to 'Edit', edit_user_path(@user) %> - <%= link_to 'Create a new post', new_post_path %> | 
+                                                   <%= link_to 'Return to home page', root_path %>
 <% else %>
     <%= link_to 'Return home page', root_path %>
 <% end %>
